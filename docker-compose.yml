@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  backend_python:
+    build:
+      context: .
+      dockerfile: backend_python/Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend_python:/app
+    environment:
+      - PYTHONPATH=${PYTHONPATH}
+
+  backend_go:
+    build:
+      context: ./backend_go
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./backend_go:/app

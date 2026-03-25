@@ -1,0 +1,8 @@
+.env
+
+/backend_python/data/*
+/backend_go/data/*
+structure.txt
+
+__pycache__/
+*.pyc
