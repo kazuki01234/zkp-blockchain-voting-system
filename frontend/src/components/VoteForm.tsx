@@ -35,22 +35,23 @@ const languages = [
 
 export const VoteForm = () => {
   const { getKeys, saveKeys } = useKeys();
+  const { publicKey } = getKeys();
+
   const [selected, setSelected] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
-  const [hasVoted, setHasVoted] = useState(false);
   const navigate = useNavigate();
+  const hasVoted = (() => {
+    if (!publicKey) return false;
+    return localStorage.getItem(`voted_${publicKey}`) === "true";
+  })();
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const { privateKey, publicKey } = getKeys();
+
     if (!privateKey || !publicKey) {
       saveKeys();
-    }
-
-    if (publicKey) {
-      const voted = localStorage.getItem(`voted_${publicKey}`);
-      if (voted) setHasVoted(true);
     }
   }, [getKeys, saveKeys]);
 
@@ -80,7 +81,6 @@ export const VoteForm = () => {
 
       setStatus("✅ Vote submitted (ZKP verified)");
       localStorage.setItem(`voted_${publicKey}`, "true");
-      setHasVoted(true);
 
       setTimeout(() => navigate("/blockchain"), 1000);
     } catch (err: unknown) {
