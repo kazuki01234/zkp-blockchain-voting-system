@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
-	"github.com/kazuki01234/voting_blockchain_project/backend_go/blockchain"
+	"github.com/kazuki01234/zkp-blockchain-voting-system/backend_go/blockchain"
 )
 
 func ChainHandler(c *gin.Context) {

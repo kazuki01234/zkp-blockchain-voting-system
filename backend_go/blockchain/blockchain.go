@@ -12,9 +12,9 @@ import (
 )
 
 type Transaction struct {
-	Voter     string `json:"voter"`
-	Vote      string `json:"vote"`
-	Signature string `json:"signature"`
+	VoterHash  string `json:"voter_hash"`
+	Proof     string `json:"proof"`
+	ProofValid bool   `json:"proof_valid"`
 }
 
 type Block struct {
@@ -81,7 +81,7 @@ func (bc *Blockchain) AddBlock(votes []Transaction) (Block, error) {
     defer bc.mu.Unlock()
 
     for _, v := range votes {
-        if _, ok := bc.VotedPublicKeys[v.Voter]; ok {
+        if _, ok := bc.VotedPublicKeys[v.VoterHash]; ok {
             return Block{}, errors.New("this public key has already voted")
         }
     }
@@ -99,7 +99,7 @@ func (bc *Blockchain) AddBlock(votes []Transaction) (Block, error) {
     bc.Chain = append(bc.Chain, newBlock)
 
     for _, v := range votes {
-        bc.VotedPublicKeys[v.Voter] = struct{}{}
+        bc.VotedPublicKeys[v.VoterHash] = struct{}{}
     }
 
     go func() {
@@ -117,15 +117,8 @@ func (bc *Blockchain) HasVoted(pubKey string) bool {
 }
 
 func (bc *Blockchain) GetResults() map[string]int {
-	bc.mu.Lock()
-	defer bc.mu.Unlock()
-	results := make(map[string]int)
-	for _, block := range bc.Chain {
-		for _, v := range block.Votes {
-			results[v.Vote]++
-		}
-	}
-	return results
+	// Results cannot be computed because vote contents are hidden (ZKP stub design)
+	return map[string]int{}
 }
 
 func (bc *Blockchain) GetChain() []Block {

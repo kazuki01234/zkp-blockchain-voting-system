@@ -64,7 +64,9 @@ export const BlockchainVisualizer: React.FC = () => {
               <p className="text-gray-400 mt-2">No votes in this block</p>
             ) : (
               block.votes.map((v, i) => {
-                const shortVoter = `${v.voter_hash.slice(0, 6)}...${v.voter_hash.slice(-6)}`;
+                const shortVoter = v.voter_hash
+                  ? `${v.voter_hash.slice(0, 6)}...${v.voter_hash.slice(-6)}`
+                  : "unknown";
 
                 return (
                   <div

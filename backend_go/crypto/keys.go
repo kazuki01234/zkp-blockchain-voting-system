@@ -8,7 +8,7 @@ import (
 	"github.com/btcsuite/btcd/btcec/v2/ecdsa"
 )
 
-func VerifyVote(pubKeyHex, voteData, sigHex string) bool {
+func VerifySignature(pubKeyHex, message, sigHex string) bool {
 	pubKeyBytes, err := hex.DecodeString(pubKeyHex)
 	if err != nil {
 		return false
@@ -29,7 +29,12 @@ func VerifyVote(pubKeyHex, voteData, sigHex string) bool {
 		return false
 	}
 
-	hash := sha256.Sum256([]byte(voteData))
+	hash := sha256.Sum256([]byte(message))
 
 	return sig.Verify(hash[:], pubKey)
+}
+
+func HashPublicKey(pubKey string) string {
+	hash := sha256.Sum256([]byte(pubKey))
+	return hex.EncodeToString(hash[:])
 }
