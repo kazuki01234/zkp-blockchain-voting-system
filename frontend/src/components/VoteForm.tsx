@@ -77,6 +77,7 @@ export const VoteForm = () => {
         voter_public_key: publicKey,
         proof,
         signature,
+        vote_data: selected,
       });
 
       setStatus("✅ Vote submitted (ZKP verified)");
@@ -156,6 +157,12 @@ export const VoteForm = () => {
           className="bg-blue-500 text-white px-6 py-2 rounded"
         >
           {hasVoted ? "✅ Already Voted" : "Submit Vote"}
+        </button>
+        <button
+          onClick={() => navigate("/results")}
+          className="bg-orange-500 text-white px-6 py-2 rounded"
+        >
+          View Results
         </button>
         <button
           onClick={handleViewBlockchain}

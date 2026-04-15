@@ -10,6 +10,7 @@ import (
 
 type VoteRequest struct {
 	VoterPublicKey string `json:"voter_public_key"`
+	VoteData       string `json:"vote_data"`
 	Proof          string `json:"proof"`
 	Signature      string `json:"signature"`
 }
@@ -49,6 +50,7 @@ func VoteHandler(c *gin.Context) {
 
 	tx := blockchain.Transaction{
 		VoterHash:  voterHash,
+		VoteData:   req.VoteData,
 		Proof:     req.Proof,
 		ProofValid: proofValid,
 	}

@@ -15,7 +15,7 @@ def get_results() -> Dict[str, int]:
 
     for block in blockchain.chain:
         for tx in block.votes:
-            vote = tx.get("vote")
+            vote = tx.get("vote_data")
             if vote:
                 votes.append(vote)
 

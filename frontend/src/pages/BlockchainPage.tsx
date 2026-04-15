@@ -15,6 +15,12 @@ const BlockchainPage: React.FC = () => {
         >
           Back to Home
         </Link>
+        <Link
+          to="/results"
+          className="block w-[200px] py-2 bg-orange-500 text-white text-center rounded hover:bg-orange-600"
+        >
+          View Results
+        </Link>
       </div>
     </div>
   );

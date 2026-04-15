@@ -13,6 +13,7 @@ import (
 
 type Transaction struct {
 	VoterHash  string `json:"voter_hash"`
+	VoteData  string `json:"vote_data"` 
 	Proof     string `json:"proof"`
 	ProofValid bool   `json:"proof_valid"`
 }
@@ -117,8 +118,20 @@ func (bc *Blockchain) HasVoted(pubKey string) bool {
 }
 
 func (bc *Blockchain) GetResults() map[string]int {
-	// Results cannot be computed because vote contents are hidden (ZKP stub design)
-	return map[string]int{}
+    bc.mu.Lock()
+    defer bc.mu.Unlock()
+
+    results := make(map[string]int)
+
+    for _, block := range bc.Chain {
+        for _, v := range block.Votes {
+            if v.VoteData != "" {
+                results[v.VoteData]++
+            }
+        }
+    }
+
+    return results
 }
 
 func (bc *Blockchain) GetChain() []Block {

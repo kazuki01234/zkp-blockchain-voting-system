@@ -10,6 +10,7 @@ class VoteRequest(BaseModel):
     voter_public_key: str
     proof: str
     signature: str
+    vote_data: str
 
 @router.post("/")
 def submit_vote(vote: VoteRequest):
@@ -31,6 +32,7 @@ def submit_vote(vote: VoteRequest):
 
     blockchain.add_block([{
         "voter_hash": voter_hash,
+        "vote_data": vote.vote_data,
         "proof": vote.proof,
         "proof_valid": True
     }])
