@@ -100,8 +100,11 @@ export const VoteForm = () => {
   return (
     <div className="p-6 text-center">
       <h1 className="text-2xl font-bold mb-6 text-white">
-        Vote (ZKP Protected)
+        ZKP Blockchain Voting System
       </h1>
+      <h2 className="text-xl mb-4 text-white">
+        Vote for your favorite programming language
+      </h2>
 
       <div className="space-y-4 mb-8">
         {[0, 1, 2].map((row) => (

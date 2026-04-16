@@ -1,41 +1,87 @@
-# Electronic Voting System (Blockchain-Based)
+# ZKP-Ready Blockchain Voting System
 
 ## Overview
 
-This is a blockchain-based electronic voting system built as a personal project.  
-The goal is to explore how blockchain can provide **security**, **transparency**, and **tamper resistance** in digital voting.  
+This project is a personal prototype of a blockchain-based electronic voting system, designed to explore secure and transparent digital voting architectures.
 
-The system includes **two separate backends** — one implemented in **Python (FastAPI)** and another in **Go** — allowing comparison of design and performance across languages.
+It is not a full Zero-Knowledge Proof (ZKP) implementation, but is structured as a ZKP-ready architecture, designed with future integration of zero-knowledge proof systems in mind.
+
+The system also includes two backend implementations (Python and Go) to evaluate architectural consistency and performance across different languages.
+
 
 ## Key Features
 
-- **Digital Signature Verification**: Voters sign their vote using a private key; the backend verifies it using the corresponding public key.
-- **Block-Based Storage**: Valid votes are grouped into blocks and linked via cryptographic hashes.
-- **Tamper Detection**: The chain can be validated to detect any alteration in the vote history.
-- **Simple UI**: React-based frontend allows users to generate key pairs, sign votes, and view blockchain data.
-- **Blockchain Visualizer**: Interactive page to view all blocks, transactions, and vote details.
-- **One Vote Per Public Key**: Ensures each voter can cast only a single vote.
-- **Two Backend Implementations**:
-  - **Python (FastAPI)**: Quick development and easy prototyping
-  - **Go**: High performance, concurrency with goroutines, and strong type safety
+- **Digital Signature Verification**  
+  Votes are signed client-side using ECDSA and verified on the backend.
 
-## Technologies
+- **Blockchain-Based Vote Storage**  
+  Votes are stored in a chain of cryptographically linked blocks.
 
-- **Frontend**: React + TypeScript + Vite
-- **Backend**: 
-  - FastAPI (Python)
-  - Go
-- **Crypto**: ECDSA (Elliptic Curve Digital Signatures)
-- **Utilities**: Standard libraries in Python and Go (`hashlib`, `json`, `time`, `encoding/json`, etc.)
+- **Tamper Detection**  
+  Any modification in the blockchain can be detected through hash validation.
 
-## Current Status
+- **One Vote Per Public Key**  
+  Prevents double voting using public key uniqueness constraints.
 
-- UI ↔ Backend communication works (both Python and Go versions)  
-- Votes are signed and verified properly  
-- Blockchain grows with each validated vote  
-- Duplicate vote prevention: Implemented
-- Blockchain persistence: Implemented
-- Blockchain visualization: Implemented
+- **ZKP-Ready Verification Layer (Stub)**  
+  Abstract verification interface prepared for future zero-knowledge proof integration.
+
+- **Dual Backend Implementation**
+  - Python (FastAPI): rapid prototyping
+  - Go (Gin): performance and concurrency comparison
+
+## Security Design
+
+### 1. Digital Signature Verification
+
+Each vote is signed using the voter’s private key and verified using the corresponding public key.
+
+- Prevents impersonation
+- Ensures vote authenticity
+- Private keys are never transmitted to the server
+
+### 2. Double Voting Prevention
+
+Each public key is allowed to vote only once.
+```
+public_key → unique constraint
+```
+
+### 3. Blockchain Integrity
+
+Votes are stored in a linked blockchain structure:
+```
+block.hash → next_block.previous_hash
+```
+This ensures full tamper resistance and traceability.
+
+### 4. ZKP-Ready Layer (Stub)
+
+The system includes an abstract proof verification layer:
+```
+verify_proof(proof)
+```
+Currently implemented as a lightweight stub, but designed to be replaced with:
+
+- zkSNARK / zkSTARK verification
+- Commitment-based voting systems
+- Anonymous voting mechanisms
+
+## Tech Stack
+
+### Frontend
+- React
+- TypeScript
+- Vite
+
+### Backend
+- FastAPI (Python)
+- Gin (Go)
+
+### Cryptography
+- ECDSA (secp256k1)
+- SHA-256
+
 
 ## Screenshots
 
@@ -53,19 +99,16 @@ The system includes **two separate backends** — one implemented in **Python (F
 
 ## How to Use
 
-1. Launch the Python backend (`docker-compose build && docker-compose up -d`)
+1. Launch the backend (`docker-compose build && docker-compose up -d`)
 2. Start the frontend 
 - Python: (`cd frontend && npm install && npm run dev:python`)
 - Go: (`cd frontend && npm install && npm run dev:go`)
 3. Open the UI in your browser
 
-## Voting
-
-- Generate or load a key pair (stored in localStorage)
-- Select an option and vote — your vote is signed and sent to the backend
-- Backend verifies the signature and adds the vote to the blockchain
-
-## Planned Improvements
-
-- Add unit tests and error handling
-- Benchmark performance differences between Python and Go backends
+## Voting Flow
+1. Generate or load a key pair (stored in localStorage)
+2. Sign the vote in the browser
+3. Submit the vote to the backend
+4. Backend verifies signature and ZKP stub
+5. Vote is added to the blockchain
+6. Results are updated
